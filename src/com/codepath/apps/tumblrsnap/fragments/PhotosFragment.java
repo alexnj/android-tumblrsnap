@@ -102,6 +102,8 @@ public class PhotosFragment extends Fragment {
 			case R.id.action_use_existing:
 			{
 				// Take the user to the gallery app
+				Intent existingPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+				startActivityForResult(existingPhoto, PICK_PHOTO_CODE);
 			}
 			break;
 		}
@@ -113,14 +115,12 @@ public class PhotosFragment extends Fragment {
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == TAKE_PHOTO_CODE) {
 				// Extract the photo that was just taken by the camera
-				
 				// Call the method below to trigger the cropping
 				cropPhoto(photoFileUri);
 			} else if (requestCode == PICK_PHOTO_CODE) {
 				// Extract the photo that was just picked from the gallery
-				
 				// Call the method below to trigger the cropping
-				// cropPhoto(photoUri)
+				 cropPhoto(data.getData());
 			} else if (requestCode == CROP_PHOTO_CODE) {
 				photoBitmap = data.getParcelableExtra("data");
 				startPreviewPhotoActivity();
