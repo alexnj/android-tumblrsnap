@@ -42,8 +42,11 @@ public class PhotosFragment extends Fragment {
 	private static final int CROP_PHOTO_CODE = 3;
 	private static final int POST_PHOTO_CODE = 4;
 	
+	private static final int MEDIA_TYPE_IMAGE = 1;
+	
 	private String photoUri;
 	private Bitmap photoBitmap;
+	private Uri photoFileUri;
 	
 	TumblrClient client;
 	ArrayList<Photo> photos;
@@ -87,7 +90,13 @@ public class PhotosFragment extends Fragment {
 		switch(item.getItemId()) {
 			case R.id.action_take_photo:
 			{
-				// Take the user to the camera app
+				 // create Intent to take a picture and return control to the calling application
+			    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			    photoFileUri = Uri.fromFile(getOutputMediaFile()); // create a file to save the image
+			    intent.putExtra(MediaStore.EXTRA_OUTPUT, photoFileUri); // set the image file name
+
+			    // start the image capture Intent
+			    startActivityForResult(intent, TAKE_PHOTO_CODE);
 			}
 			break;
 			case R.id.action_use_existing:
@@ -106,7 +115,7 @@ public class PhotosFragment extends Fragment {
 				// Extract the photo that was just taken by the camera
 				
 				// Call the method below to trigger the cropping
-				// cropPhoto(photoUri)
+				cropPhoto(photoFileUri);
 			} else if (requestCode == PICK_PHOTO_CODE) {
 				// Extract the photo that was just picked from the gallery
 				
